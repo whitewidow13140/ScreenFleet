@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/golang/protobuf/ptypes/empty/empty.proto";
+
+option (gogoproto.sizer_all) = false;
+option (gogoproto.marshaler_all) = false;
+option (gogoproto.unmarshaler_all) = false;
+option (gogoproto.goproto_getters_all) = false;
+option (gogoproto.goproto_enum_stringer_all) = false;
+
+service TelevisionStore {
+  rpc GetTelevision(GetTelevisionReq) returns (Television);
+  rpc ListTelevisions(ListTelevisionsReq) returns (ListTelevisionsResp);
+  rpc UpdateTelevision(Television) returns (Television);
+  rpc DeleteTelevision(DeleteTelevisionReq) returns (google.protobuf.Empty);
+}
+
+message GetTelevisionReq { string id = 1; }
+
+message ListTelevisionsReq {
+  int64 from = 1;
+  int64 size = 2;
+}
+
+message ListTelevisionsResp { repeated Television televisions = 1; }
+
+message DeleteTelevisionReq { string id = 1; }
+
+enum Status {
+  option (gogoproto.goproto_enum_prefix) = false;
+  STATUS_UNDEFINED = 0 [ (gogoproto.enumvalue_customname) = "StatusUndefined" ];
+  OFFLINE = 1 [ (gogoproto.enumvalue_customname) = "StatusOffline" ];
+  ONLINE = 2 [ (gogoproto.enumvalue_customname) = "StatusOnline" ];
+}
+
+message Television {
+  string id = 1 [ (gogoproto.customname) = "ID" ];
+  string name = 2;
+  string ip = 3 [ (gogoproto.customname) = "IP" ];
+  Status status = 4;
+  string composition_id = 5 [ (gogoproto.customname) = "CompositionID" ];
+}
